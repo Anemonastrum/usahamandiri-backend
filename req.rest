@@ -1,0 +1,54 @@
+GET http://localhost:3000/products
+###
+
+GET http://localhost:3000/categories
+
+###
+
+GET http://localhost:3000/productImages
+
+###
+
+DELETE http://localhost:3000/products/667c52fba629647a3f6f5f24
+
+###
+PATCH http://localhost:3000/products/667c2f85a83aed866b5f4c37
+Content-Type: application/json
+
+{
+    "name" : "Bunga Rusdi Ngawi XYZ",
+    "description" : "Sebuah bunga aseli ngawi",
+    "price" : "10000",
+    "stock" : "5",
+    "category_name" : "HYTAM"
+}
+###
+POST http://localhost:3000/categories/
+Content-Type: application/json
+
+{
+    "name" : "Bunga 2"
+}
+
+###
+
+POST http://localhost:3000/productImages/
+Content-Type: application/json
+
+{
+    "url" : "https://ngawi.com/23",
+    "product_id" : "667c2f85a83aed866b5f4c37"
+}
+
+###
+
+PATCH http://localhost:3000/categories/667c4da6feba1f4a21471e3d/
+Content-Type: application/json
+
+{
+    "name" : "HYTAM"
+}
+
+###
+
+DELETE http://localhost:3000/categories/667c4da6feba1f4a21471e3d/
