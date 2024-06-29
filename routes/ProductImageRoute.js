@@ -6,13 +6,14 @@ import {
     updateProductImage,
     deleteProductImage
 } from "../controllers/ProductImageController.js";
+import { verifyAdmin } from "../middleware/AuthMiddleware.js";
 
 const router = express.Router();
 
 router.get('/productImages', getProductImages);
 router.get('/productImages/:id', getProductImagesById);
-router.post('/productImages', saveProductImage);
-router.patch('/productImages/:id', updateProductImage);
-router.delete('/productImages/:id', deleteProductImage);
+router.post('/productImages', verifyAdmin, saveProductImage);
+router.patch('/productImages/:id', verifyAdmin, updateProductImage);
+router.delete('/productImages/:id', verifyAdmin, deleteProductImage);
 
 export default router;
