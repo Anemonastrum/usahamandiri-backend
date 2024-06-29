@@ -28,6 +28,6 @@ app.use(CategoryRoute);
 app.use(AuthRoute);
 
 // Server
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`Server is running on port ${port}`);
 });
