@@ -1,5 +1,6 @@
 import Product from "../models/ProductModel.js";
 import Category from "../models/CategoryModel.js";
+import mongoose from 'mongoose';
 
 export const getProducts = async (req, res) => {
     try {
@@ -20,10 +21,13 @@ export const getProductsById = async (req, res) => {
 };
 
 export const saveProduct = async (req, res) => {
-    const { name, description, price, stock, category_name } = req.body;
+    const { name, description, price, stock, category_id } = req.body;
 
+    if (!mongoose.Types.ObjectId.isValid(category_id)) {
+        return res.status(400).send({ message: 'Invalid category_id format' });
+    }
     try {
-        const category = await Category.findOne({ name: category_name });
+        const category = await Category.findById(category_id);
         if (!category) {
             return res.status(400).send({ message: 'Category not found' });
         }
@@ -33,7 +37,7 @@ export const saveProduct = async (req, res) => {
             description,
             price,
             stock,
-            category: category._id
+            category_id: category._id
         });
 
         const insertedProduct = await product.save();
@@ -56,13 +60,17 @@ export const deleteProduct = async (req, res) => {
 };
 
 export const updateProduct = async (req, res) => {
-    const { name, description, price, stock, category_name } = req.body;
+    const { name, description, price, stock, category_id } = req.body;
 
     try {
-        // If a new category name is provided, find the category ID
+        // If a new category ID is provided, validate it
+        if (category_id && !mongoose.Types.ObjectId.isValid(category_id)) {
+            return res.status(400).send({ message: 'Invalid category_id format' });
+        }
+
         let category = null;
-        if (category_name) {
-            category = await Category.findOne({ name: category_name });
+        if (category_id) {
+            category = await Category.findById(category_id);
             if (!category) {
                 return res.status(400).send({ message: 'Category not found' });
             }
@@ -76,7 +84,7 @@ export const updateProduct = async (req, res) => {
         };
 
         if (category) {
-            updatedData.category = category._id;
+            updatedData.category_id = category._id;
         }
 
         const updatedProduct = await Product.findByIdAndUpdate(req.params.id, updatedData, { new: true });
