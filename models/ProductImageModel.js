@@ -8,6 +8,7 @@ const ProductImage = mongoose.Schema({
     product_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',
+        unique: true,
         required: true
     }
 });
