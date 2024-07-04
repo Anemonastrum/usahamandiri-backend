@@ -6,20 +6,20 @@ import ProductImageRoute from "./routes/ProductImageRoute.js";
 import CategoryRoute from "./routes/CategoryRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
 import "./config/db.js";
+import { HOST, PORT } from './config/config.js';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT;
-
-if (!process.env.PORT) {
-    console.error('Error: PORT is not defined in the .env file');
-    process.exit(1);
-}
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true 
+}));
 app.use(express.json());
+app.use(cookieParser());
 
 // Routes
 app.use(ProductRoute);
@@ -28,6 +28,4 @@ app.use(CategoryRoute);
 app.use(AuthRoute);
 
 // Server
-app.listen(port, '0.0.0.0', () => {
-    console.log(`Server is running on port ${port}`);
-});
+app.listen(PORT, () => console.log(`Server started on http://${HOST}:${PORT}`));

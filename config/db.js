@@ -1,12 +1,10 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv";
+import { DB_USER, DB_KEY, DB_HOST, DB_COL } from './config.js';
 
-dotenv.config();
+const database_url = `mongodb://${DB_USER}:${DB_KEY}@${DB_HOST}:27017/${DB_COL}`
 
-const database_url = process.env.DATABASE_URL;
-
-if (!database_url) {
-    console.error('Error: DATABASE_URL is not defined in the .env file');
+if (!DB_HOST) {
+    console.error('Error: Database is not defined properly in the .env file');
     process.exit(1);
 }
 

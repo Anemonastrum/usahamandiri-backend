@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../models/UserModel.js";
 import Admin from "../models/AdminModel.js";
+import bcrypt from "bcryptjs";
 
 export const verifyToken = (req, res, next) => {
     const token = req.header("x-auth-token");
@@ -53,4 +54,24 @@ export const verifyUserOrAdmin = async (req, res, next) => {
     } catch (error) {
         res.status(400).json({ message: "Token is not valid!" });
     }
+};
+
+export const hashPassword = (password) => {
+    return new Promise((resolve, reject) => {
+        bcrypt.genSalt(8, (err, salt) => {
+            if (err) {
+                reject(err);
+            }
+            bcrypt.hash(password, salt, (err, hash) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve(hash);
+            });
+        });
+    });
+};
+
+export const comparePassword = (password, hashed) => {
+    return bcrypt.compare(password, hashed);
 };
