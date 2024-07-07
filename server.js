@@ -22,10 +22,10 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Routes
-app.use(ProductRoute);
-app.use(ProductImageRoute);
-app.use(CategoryRoute);
-app.use(AuthRoute);
+app.use('/api/', ProductRoute);
+app.use('/api/', ProductImageRoute);
+app.use('/api/', CategoryRoute);
+app.use('/api/', AuthRoute);
 
 // Server
 app.listen(PORT, () => console.log(`Server started on http://${HOST}:${PORT}`));

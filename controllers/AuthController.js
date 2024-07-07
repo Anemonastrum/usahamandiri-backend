@@ -80,23 +80,26 @@ export const login = async (req, res) => {
         const { login, password } = req.body;
         const user = await User.findOne({ $or: [{ email: login }, { username: login }] });
         const admin = await Admin.findOne({ $or: [{ email: login }, { username: login }] });
+
         if (!user && !admin) {
             return res.status(404).json({ message: "User or Admin not found!" });
         }
+
         const account = user || admin;
         const isMatch = await comparePassword(password, account.password);
+
         if (isMatch) {
+            const role = user ? 'user' : 'admin';
             jwt.sign(
-                { id: account._id },
+                { id: account._id, role: role },
                 process.env.JWT_SECRET,
                 {},
                 (err, token) => {
-                    if(err) throw err;
-                    res.cookie('token', token).json(account)
+                    if (err) throw err;
+                    res.cookie('token', token).json({ role });
                 }
-              );
-        }
-        if (!isMatch) {
+            );
+        } else {
             return res.status(400).json({ error: "Invalid credentials!" });
         }
     } catch (error) {
