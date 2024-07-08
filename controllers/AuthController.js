@@ -23,6 +23,21 @@ export const registerUser = async (req, res) => {
                 error: 'Please input minimum 8 character for Password'
             })
         };
+        if(!email) {
+            return res.json({
+                error: 'Email is required'
+            })
+        };
+        if(!address) {
+            return res.json({
+                error: 'Address is required'
+            })
+        };
+        if(!phoneNumber) {
+            return res.json({
+                error: 'Number is required'
+            })
+        };
         const userEmailExist = await User.findOne({ email });
         const adminEmailExist = await Admin.findOne({ email });
         if(userEmailExist || adminEmailExist){
