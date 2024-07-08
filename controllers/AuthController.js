@@ -106,7 +106,7 @@ export const login = async (req, res) => {
         if (isMatch) {
             const role = user ? 'user' : 'admin';
             jwt.sign(
-                { id: account._id, role: role },
+                { id: account._id, username: account.username, email: account.email, address: account.address, number: account.phoneNumber, role: role },
                 process.env.JWT_SECRET,
                 {},
                 (err, token) => {
@@ -133,4 +133,14 @@ export const getProfile = (req, res) => {
     } else {
         res.json(null)
     }
-}
+};
+
+export const logout = (req, res) => {
+    try {
+      res.clearCookie("token");
+      res.json({ message: "Logged out successfully" });
+    } catch (error) {
+      console.error("Logout error:", error);
+      res.status(500).json({ error: "Logout failed" });
+    }
+  };
