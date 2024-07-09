@@ -20,6 +20,18 @@ export const getProductImagesById = async (req, res) => {
     }
 };
 
+export const getProductImagesByProductId = async (req, res) => {
+    const { productId } = req.params;
+
+    try {
+        const productImages = await ProductImage.find({ product_id: productId });
+        res.json(productImages);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
+
 export const saveProductImage = async (req, res) => {
     const { url, product_id } = req.body;
 
