@@ -144,3 +144,69 @@ export const logout = (req, res) => {
       res.status(500).json({ error: "Logout failed" });
     }
   };
+
+export const getAllUsersAndAdmins = async (req, res) => {
+    try {
+        const users = await User.find();
+        const admins = await Admin.find();
+        res.status(200).json({ users, admins });
+    } catch (error) {
+        console.log("Error fetching users and admins:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+export const updateUser = async (req, res) => {
+    try {
+        const { username, email, address, phoneNumber } = req.body;
+        const { token } = req.cookies;
+
+        if (!token) {
+            return res.status(401).json({ error: "Unauthorized. Please log in." });
+        }
+
+        // Verify the token and extract user information
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+            if (err) {
+                return res.status(401).json({ error: "Invalid token." });
+            }
+
+            const userId = decoded.id;
+
+            // Find the user by ID
+            const user = await User.findById(userId);
+
+            if (!user) {
+                return res.status(404).json({ error: "User not found." });
+            }
+
+            // Update the user's information
+            if (username) user.username = username;
+            if (email) user.email = email;
+            if (address) user.address = address;
+            if (phoneNumber) user.phoneNumber = phoneNumber;
+
+            // Check for existing username or email conflicts
+            if (username) {
+                const usernameExists = await User.findOne({ username });
+                if (usernameExists && usernameExists._id.toString() !== userId.toString()) {
+                    return res.status(400).json({ error: "Username is already taken." });
+                }
+            }
+
+            if (email) {
+                const emailExists = await User.findOne({ email });
+                if (emailExists && emailExists._id.toString() !== userId.toString()) {
+                    return res.status(400).json({ error: "Email is already registered." });
+                }
+            }
+
+            // Save the updated user
+            await user.save();
+            res.status(200).json({ message: "User updated successfully!" });
+        });
+    } catch (error) {
+        console.log("Error updating user:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};

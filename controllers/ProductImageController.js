@@ -71,7 +71,7 @@ export const deleteProductImage = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const deletedProductImage = await ProductImage.findByIdAndRemove(id);
+        const deletedProductImage = await ProductImage.findByIdAndDelete(id);
         if (!deletedProductImage) {
             return res.status(404).json({ message: 'Product image not found' });
         }
@@ -80,3 +80,4 @@ export const deleteProductImage = async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 };
+
