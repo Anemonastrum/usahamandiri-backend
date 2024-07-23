@@ -1,5 +1,5 @@
 import express from 'express';
-import { addInformation, updateInformation, getInformation, getInformationById } from './InformationController.js';
+import { addInformation, updateInformation, getInformation, getInformationById } from '../controllers/InformationController.js';
 
 const router = express.Router();
 
