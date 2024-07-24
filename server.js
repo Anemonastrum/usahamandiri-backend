@@ -17,11 +17,14 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000', 'https://usahamandirimagelang.com', 'http://10.10.10.121:3000'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Auth-Token'],
     credentials: true 
 }));
-app.use(express.json());
 app.use(cookieParser());
+app.use(express.json());
+
 
 // Routes
 app.use('/api/', ProductRoute);

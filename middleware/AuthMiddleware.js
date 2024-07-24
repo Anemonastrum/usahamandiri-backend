@@ -4,7 +4,7 @@ import Admin from "../models/AdminModel.js";
 import bcrypt from "bcryptjs";
 
 export const verifyToken = (req, res, next) => {
-    const token = req.header("x-auth-token");
+    const token = req.cookies.token || req.header("x-auth-token");
     if (!token) return res.status(401).json({ message: "No token, authorization denied!" });
 
     try {
@@ -17,7 +17,7 @@ export const verifyToken = (req, res, next) => {
 };
 
 export const verifyAdmin = async (req, res, next) => {
-    const token = req.header("x-auth-token");
+    const token = req.cookies.token || req.header("x-auth-token");
     if (!token) return res.status(401).json({ message: "No token, authorization denied!" });
 
     try {
@@ -34,7 +34,7 @@ export const verifyAdmin = async (req, res, next) => {
 };
 
 export const verifyUserOrAdmin = async (req, res, next) => {
-    const token = req.header("x-auth-token");
+    const token = req.cookies.token || req.header("x-auth-token");
     if (!token) return res.status(401).json({ message: "No token, authorization denied!" });
 
     try {
